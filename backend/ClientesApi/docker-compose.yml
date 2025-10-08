@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  oracle-db:
+    image: gvenzl/oracle-xe:21-slim
+    container_name: oracle-db
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PASSWORD: admin123
+      ORACLE_ALLOW_REMOTE: "true"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+
+  backend:
+    build: .
+    ports:
+      - "7106:7106"
+    environment:
+      ConnectionStrings__OracleDb: "User Id=APP_USER;Password=admin123;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle-db)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XEPDB1)))"
+    depends_on:
+      - oracle-db
+
+volumes:
+  oracle-data:

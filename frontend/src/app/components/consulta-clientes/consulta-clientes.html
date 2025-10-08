@@ -1,0 +1,49 @@
+<div class="consulta-container">
+  <h2>Consulta de Clientes</h2>
+
+  <div class="search-bar">
+    <input
+      type="text"
+      placeholder="Buscar por RUC o Razón Social..."
+      [(ngModel)]="terminoBusqueda"
+      (keyup.enter)="onEnterKeyPress()"
+    />
+    <button (click)="buscarClientes()" [disabled]="isLoading">
+      <span *ngIf="!isLoading">Buscar</span>
+      <span *ngIf="isLoading">Cargando...</span>
+    </button>
+  </div>
+
+  <hr />
+
+  <div *ngIf="isLoading" class="loading-message">Obteniendo datos de Oracle...</div>
+
+  <div *ngIf="!isLoading && clientes.length > 0" class="results-table">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>RUC</th>
+          <th>Razón Social</th>
+          <th>Teléfono</th>
+          <th>Correo</th>
+          <th>Dirección</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cliente of clientes">
+          <td>{{ cliente.id }}</td>
+          <td>{{ cliente.ruc }}</td>
+          <td>{{ cliente.razonSocial }}</td>
+          <td>{{ cliente.telefono }}</td>
+          <td>{{ cliente.correo }}</td>
+          <td>{{ cliente.direccion }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!isLoading && clientes.length === 0" class="no-results">
+    No se encontraron clientes que coincidan con la búsqueda.
+  </div>
+</div>
